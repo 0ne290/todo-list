@@ -1,0 +1,70 @@
+basePath: /
+definitions:
+  create.RequestDto:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  task.Status:
+    enum:
+    - new
+    - in_progress
+    - done
+    type: string
+    x-enum-varnames:
+    - New
+    - InProgress
+    - Done
+  task.Task:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      status:
+        $ref: '#/definitions/task.Status'
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: Test task
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: TODO list API
+  version: "1.0"
+paths:
+  /tasks:
+    post:
+      consumes:
+      - application/json
+      description: Create a new task.
+      parameters:
+      - description: RequestDto
+        in: body
+        name: requestDto
+        required: true
+        schema:
+          $ref: '#/definitions/create.RequestDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/task.Task'
+      summary: create a new task
+      tags:
+      - Task
+swagger: "2.0"

@@ -1,8 +1,8 @@
-package core
+package internal
 
 import (
 	"context"
-	"github.com/0ne290/todo-list/internal/core/task"
+	"github.com/0ne290/todo-list/internal/task"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -16,8 +16,10 @@ type UnitOfWork struct {
 	repository *task.TaskRepository
 }
 
-func NewUnitOfWork(ctx context.Context, pool *pgxpool.Pool) *UnitOfWork {
-	transaction, err := pool.Begin(ctx)
+var DatabaseConnectionPool *pgxpool.Pool
+
+func NewUnitOfWork(ctx context.Context) *UnitOfWork {
+	transaction, err := DatabaseConnectionPool.Begin(ctx)
 
 	if err != nil {
 		panic(err.Error())

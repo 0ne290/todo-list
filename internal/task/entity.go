@@ -14,12 +14,12 @@ const (
 )
 
 type Task struct {
-	Id          int
-	Title       string
-	Description *string
-	Status      Status
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	Id          int `json:"id"`
+	Title       string `json:"title"`
+	Description *string `json:"description"`
+	Status      Status `json:"status"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
 func NewTask(title string, description *string, createdAt time.Time) *Task {
