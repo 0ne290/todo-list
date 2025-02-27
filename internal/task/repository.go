@@ -21,7 +21,7 @@ func NewTaskRepository(transaction pgx.Tx) *TaskRepository {
 }
 
 func (repository *TaskRepository) Add(ctx context.Context, task *Task) {
-	if _, err := repository.Transaction.Exec(ctx, "INSERT INTO tasks VALUES ($1, $2, $3, $4, $5)", task.Title, task.Description, task.Status, task.CreatedAt, task.UpdatedAt); err != nil {
+	if _, err := repository.Transaction.Exec(ctx, "INSERT INTO tasks VALUES (DEFAULT, $1, $2, $3, $4, $5)", task.Title, task.Description, task.Status, task.CreatedAt, task.UpdatedAt); err != nil {
 		panic(err.Error())
 	}
 }

@@ -23,7 +23,7 @@ import (
 // @contact.email fiber@swagger.io
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:8080
+// @host localhost:80
 // @BasePath /
 func main() {
 	app := fiber.New()
@@ -38,7 +38,7 @@ func main() {
 
 	registerRoutes(app)
 
-	app.Listen(":8080")
+	app.Listen(":80")
 }
 
 func registerMiddlewares(app *fiber.App) {

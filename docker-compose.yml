@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_CONNECTION_STRING: user=${DB_USER} password=${DB_PASSWORD} host=db port=5432 dbname=${DB_DATABASE}
+    ports:
+      - "80:80"
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./internal/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    
+volumes:
+  db-data:
