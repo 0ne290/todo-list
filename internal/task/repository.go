@@ -21,7 +21,9 @@ func NewTaskRepository(transaction pgx.Tx) *TaskRepository {
 }
 
 func (repository *TaskRepository) Add(ctx context.Context, task *Task) {
-	if _, err := repository.Transaction.Exec(ctx, "INSERT INTO tasks VALUES (DEFAULT, $1, $2, $3, $4, $5)", task.Title, task.Description, task.Status, task.CreatedAt, task.UpdatedAt); err != nil {
+	err := repository.Transaction.QueryRow(ctx, "INSERT INTO tasks VALUES (DEFAULT, $1, $2, $3, $4, $5) RETURNING id", task.Title, task.Description, task.Status, task.CreatedAt, task.UpdatedAt).Scan(&task.Id)
+
+	if err != nil {
 		panic(err.Error())
 	}
 }
@@ -37,7 +39,7 @@ func (repository *TaskRepository) GetAll(ctx context.Context) []*Task {
 	for rows.Next() {
 		task := &Task{}
 
-		err := rows.Scan(&task.Id, &task.Title, task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
+		err := rows.Scan(&task.Id, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
 		if err != nil {
 			panic(err)
 		}

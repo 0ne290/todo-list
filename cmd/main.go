@@ -11,6 +11,7 @@ import (
 
 	"github.com/0ne290/todo-list/internal"
 	createTask "github.com/0ne290/todo-list/internal/task/create"
+	getAllTasks "github.com/0ne290/todo-list/internal/task/getAll"
 
 	_ "github.com/0ne290/todo-list/docs"
 )
@@ -51,7 +52,7 @@ func registerRoutes(app *fiber.App) {
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	app.Post("/tasks", createTask.Handle)
-	//app.Get("/tasks", controllers.GetBook)
+	app.Get("/tasks", getAllTasks.Handle)
 	//app.Put("/tasks/:id", controllers.UserSignUp)
 	//app.Delete("/tasks/:id", controllers.UserSignIn)
 }
