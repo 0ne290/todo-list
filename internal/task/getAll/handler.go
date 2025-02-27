@@ -20,7 +20,7 @@ func Handle(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"error": false,
-		"msg":   nil,
+		"msg":   "tasks is gotten",
 		"tasks":  tasks,
 	})
 }

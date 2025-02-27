@@ -2,12 +2,14 @@ package task
 
 import (
 	"context"
+
 	"github.com/jackc/pgx/v5"
 )
 
 type ITaskRepository interface {
 	Add(ctx context.Context, task *Task)
 	GetAll(ctx context.Context) []*Task
+	GetById(ctx context.Context, id int) *Task
 	Update(ctx context.Context, task *Task)
 	Remove(ctx context.Context, id int)
 }
@@ -51,6 +53,22 @@ func (repository *TaskRepository) GetAll(ctx context.Context) []*Task {
 	}
 
 	return tasks
+}
+
+func (repository *TaskRepository) GetById(ctx context.Context, id int) *Task {
+	task := &Task{}
+
+	err := repository.Transaction.QueryRow(ctx, "SELECT * FROM tasks WHERE id = $1 FOR UPDATE", id).Scan(&task.Id, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
+
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil
+		}
+
+		panic(err.Error())
+	}
+
+	return task
 }
 
 func (repository *TaskRepository) Update(ctx context.Context, task *Task) {
